@@ -25,6 +25,7 @@ let jobTitle: string = '';
 let company: string = '';
 let jobDates: any;
 let skills = [''];
+let avatarUrl='';
 
 resumeForm.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -42,7 +43,7 @@ resumeForm.addEventListener("submit", function (event) {
     skills = (document.getElementById("skills") as HTMLInputElement).value.split(",");
 
 
-    const avatarUrl = avatar ? URL.createObjectURL(avatar) : "";
+    avatarUrl = avatar ? URL.createObjectURL(avatar) : "";
     personalInfoSection.innerHTML = `<h3>Personal Information</h3>
    <p><strong>Name:</strong> ${Name}</p><p><strong>Email:</strong> ${email}</p>
    <img src=${avatarUrl} alt="Profile Picture" class="profile-pic"> `;
@@ -56,7 +57,7 @@ interface Resume {
     id: string;
     personalInfo: {
         name: string;
-        avatar: File | undefined;
+        avatarUrl: string;
         email: string;
     };
     education: {
@@ -80,7 +81,7 @@ saveButton.addEventListener("click", () => {
         id: crypto.randomUUID(),
         personalInfo: {
             name: Name,
-            avatar,
+            avatarUrl,
             email,
         },
         education: {
@@ -130,6 +131,7 @@ function displaySavedResumes() {
             resumeCard.innerHTML = `
             <div>
             <h3>${resume.personalInfo.name}</h3>
+            <a href='/milestone-4/edit.html?id=${resume.id}'>edit</a>
             </div>
                 <p>Email: ${resume.personalInfo.email}</p>
                 <p>Degree: ${resume.education.degree}</p>

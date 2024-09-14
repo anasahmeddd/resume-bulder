@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>resume details</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="resugme"></div>
+    <h2>Resume details</h2>
+    <section id="personal-info"></section>
+    <section id="education"></section>
+    <section id="work-experience"></section>
+    <section id="skill-list"></section>
+    </div>
+    <button id="print-btn">Print Resume</button>
+
+    <script>
+        const personalInfoSection = document.getElementById("personal-info");
+        const educationSection = document.getElementById("education");
+        const workExperienceSection = document.getElementById("work-experience");
+        const skillListSection = document.getElementById("skill-list");
+        function getResumeFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            const resumeId = params.get('resumeId');
+
+            if (resumeId) {
+                const previousResume = localStorage.getItem('savedResume');
+                if (previousResume) {
+                    const resumesArray = JSON.parse(previousResume);
+                    const resume = resumesArray.find((r) => r.id === resumeId);
+
+                    if (resume) {
+                        // Populate the resume fields with the data from the resume object
+                        personalInfoSection.innerHTML = `<h3>Personal Information</h3>
+                    <p><strong>Name:</strong> ${resume.personalInfo.name}</p>
+                    <p><strong>Email:</strong> ${resume.personalInfo.email}</p>
+                    <img src="${resume.personalInfo.avatarUrl}" alt="Profile Picture" class="profile-pic">`;
+
+                        educationSection.innerHTML = `<h3>Education</h3>
+                    <p>${resume.education.degree} from ${resume.education.school} (${resume.education.gradYear})</p>`;
+
+                        workExperienceSection.innerHTML = `<h3>Work Experience</h3>
+                    <p>${resume.work.jobTitle} at ${resume.work.company} (${resume.work.jobDates})</p>`;
+
+                        skillListSection.innerHTML = `<h3>Skills</h3>
+                    <ul>${resume.skills.map((skill) => `<li>${skill.trim()}</li>`).join('')}</ul>`;
+                    }
+                }
+            }
+        }
+        const printButton = document.getElementById("print-btn");
+        printButton.addEventListener("click", () => {
+            window.print();
+        });
+        document.addEventListener("DOMContentLoaded", getResumeFromURL);
+
+    </script>
+</body>
+
+</html>
